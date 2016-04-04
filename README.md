@@ -8,28 +8,128 @@ TicTacToe game = new TicTacToe();
 
 // Player 'x' places a mark in the top right corner row 0, column 2
 // These values are based on a zero index array, so you may need to simply take in a row 1 and subtract 1 from it if you want that.
-game.placeMark(0,2);
-game.placeMark(1,2);
-// Lets print the board
-game.printBoard();
 
-// Did we have a winner?
+// Place 1 *****************************************
+game.placeMark(0,0);
+
+// Win Detection
 if (game.checkForWin()) {
+   game.printBoard();
+   System.out.println("We have a winner! Congrats!");
+   System.exit(0);
+}
+
+// Changes to 'o'   
+game.changePlayer();
+
+// Place 2 *****************************************
+game.placeMark(1,1);
+
+// Win Detection
+if (game.checkForWin()) {
+   game.printBoard();
+   System.out.println("We have a winner! Congrats!");
+   System.exit(0);
+}
+   
+game.changePlayer();
+
+// Place 3 ******************************************
+game.placeMark(0,1);
+
+// Win Detection
+if (game.checkForWin()) {
+   game.printBoard();
+   System.out.println("We have a winner! Congrats!");
+   System.exit(0);
+}
+
+// Changes to 'x'    
+game.changePlayer();
+
+// Place 4 ******************************************
+game.placeMark(0,2);
+
+// Win Detection
+if (game.checkForWin()) {
+   game.printBoard();
+   System.out.println("We have a winner! Congrats!");
+   System.exit(0);
+}
+
+// Changes to 'o'    
+game.changePlayer();
+
+// Place 5 ******************************************
+game.placeMark(0,2);
+
+// Win Detection
+if (game.checkForWin()) {
+   game.printBoard();
+   System.out.println("We have a winner! Congrats!");
+   System.exit(0);
+}
+
+// Changes to 'x'    
+game.changePlayer();
+
+// Place 6 ******************************************
+game.placeMark(0,2);
+
+// Win Detection
+if (game.checkForWin()) {
+   game.printBoard();
+   System.out.println("We have a winner! Congrats!");
+   System.exit(0);
+}
+
+// Changes to 'o'    
+game.changePlayer();
+
+// Place 7 ******************************************
+game.placeMark(0,2);
+
+// Win Detection
+if (game.checkForWin()) {
+   game.printBoard();
+   System.out.println("We have a winner! Congrats!");
+   System.exit(0);
+}
+
+// Changes to 'x'    
+game.changePlayer();
+
+// Place 8 ******************************************
+game.placeMark(0,2);
+
+// Win Detection
+if (game.checkForWin()) {
+   game.printBoard();
+   System.out.println("We have a winner! Congrats!");
+   System.exit(0);
+}
+
+// Changes to 'o'    
+game.changePlayer();
+
+// Place 9 ******************************************
+game.placeMark(0,2);
+
+// Win Detection
+if (game.checkForWin()) {
+   game.printBoard();
    System.out.println("We have a winner! Congrats!");
    System.exit(0);
 }
 else if (game.isBoardFull()) {
+   game.printBoard();
    System.out.println("Appears we have a draw!");
    System.exit(0);
 }
 
-// No winner or draw, switch players to 'o'
-game.changePlayer();
-
-// Repeat steps again for placing mark and checking game status...
-
+// Prints board   
+game.printBoard();                                                      
 }
-
     private char[][] board; 
     private char currentPlayerMark;
 			
@@ -135,7 +235,7 @@ game.changePlayer();
             currentPlayerMark = 'o';
         }
         else {
-            currentPlayerMark = 'x';
+            currentPlayerMark = 'o';
         }
     }
 	
