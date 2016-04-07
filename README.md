@@ -1,258 +1,156 @@
-public class TicTacToe {
-public static void main (String[]args)
-{
-
-// Create game and initialize it.
-// First player will be 'x'
-TicTacToe game = new TicTacToe();
-
-// Player 'x' places a mark in the top right corner row 0, column 2
-// These values are based on a zero index array, so you may need to simply take in a row 1 and subtract 1 from it if you want that.
-
-// Place 1 *****************************************
-game.placeMark(0,0);
-
-// Win Detection
-if (game.checkForWin()) {
-   game.printBoard();
-   System.out.println("We have a winner! Congrats!");
-   System.exit(0);
-}
-
-// Changes to 'o'   
-game.changePlayer();
-
-// Place 2 *****************************************
-game.placeMark(1,1);
-
-// Win Detection
-if (game.checkForWin()) {
-   game.printBoard();
-   System.out.println("We have a winner! Congrats!");
-   System.exit(0);
-}
-   
-game.changePlayer();
-
-// Place 3 ******************************************
-game.placeMark(0,1);
-
-// Win Detection
-if (game.checkForWin()) {
-   game.printBoard();
-   System.out.println("We have a winner! Congrats!");
-   System.exit(0);
-}
-
-// Changes to 'x'    
-game.changePlayer();
-
-// Place 4 ******************************************
-game.placeMark(0,2);
-
-// Win Detection
-if (game.checkForWin()) {
-   game.printBoard();
-   System.out.println("We have a winner! Congrats!");
-   System.exit(0);
-}
-
-// Changes to 'o'    
-game.changePlayer();
-
-// Place 5 ******************************************
-game.placeMark(0,2);
-
-// Win Detection
-if (game.checkForWin()) {
-   game.printBoard();
-   System.out.println("We have a winner! Congrats!");
-   System.exit(0);
-}
-
-// Changes to 'x'    
-game.changePlayer();
-
-// Place 6 ******************************************
-game.placeMark(0,2);
-
-// Win Detection
-if (game.checkForWin()) {
-   game.printBoard();
-   System.out.println("We have a winner! Congrats!");
-   System.exit(0);
-}
-
-// Changes to 'o'    
-game.changePlayer();
-
-// Place 7 ******************************************
-game.placeMark(0,2);
-
-// Win Detection
-if (game.checkForWin()) {
-   game.printBoard();
-   System.out.println("We have a winner! Congrats!");
-   System.exit(0);
-}
-
-// Changes to 'x'    
-game.changePlayer();
-
-// Place 8 ******************************************
-game.placeMark(0,2);
-
-// Win Detection
-if (game.checkForWin()) {
-   game.printBoard();
-   System.out.println("We have a winner! Congrats!");
-   System.exit(0);
-}
-
-// Changes to 'o'    
-game.changePlayer();
-
-// Place 9 ******************************************
-game.placeMark(0,2);
-
-// Win Detection
-if (game.checkForWin()) {
-   game.printBoard();
-   System.out.println("We have a winner! Congrats!");
-   System.exit(0);
-}
-else if (game.isBoardFull()) {
-   game.printBoard();
-   System.out.println("Appears we have a draw!");
-   System.exit(0);
-}
-
-// Prints board   
-game.printBoard();                                                      
-}
-    private char[][] board; 
-    private char currentPlayerMark;
-			
-    public TicTacToe() {
-        board = new char[3][3];
-        currentPlayerMark = 'x';
-        initializeBoard();
-    }
-	
+import java.util.Scanner;
+/**
+ * Tic Tac Toe Honors Java Group Project 2016
+ * Main Editor, Ian Rothermel
+ * Colin Messanger, Alec Roth  
+ */
+public class TicTacToe1 {
+   // Name-constants to represent the plots and cell contents
+   public static final int EMPTY = 0;
+   public static final int X = 1;
+   public static final int O = 2;
+ 
+   // Name-constants to represent the various states of the game
+   public static final int PLAYING = 0;
+   public static final int DRAW = 1;
+   public static final int X_WON = 2;
+   public static final int O_WON = 3;
+ 
+   // The game board and the game status
+   public static final int ROWS = 3, COLS = 3;         // number of rows and columns
+   public static int[][] board = new int[ROWS][COLS];  // game board in 2D array
+                                                       //  containing (EMPTY, X, O)
+   public static int currentState;                     // the current state of the game
+                                                       // (PLAYING, DRAW, X_WON, O_WON)
+   public static int currentPlayer;                    // the current player (X or O)
+   public static int currentRow, currentCol;           // current plots's row and column
+ 
+   public static Scanner in = new Scanner(System.in);  // the input Scanner
+ 
+   // Program starts
+   public static void main(String[] args) {
+      
+      initGame();
+      // Play the game 
+      do {
+         playerMove(currentPlayer);                              // update currentRow and currentCol
+         updateGame(currentPlayer, currentRow, currentCol);      // update currentState
+         printBoard();
+         // Print message if game-over
+         if (currentState == X_WON) {
+            System.out.println("'X' won! Bye!");
+         } else if (currentState == O_WON) {
+            System.out.println("'O' won! Bye!");
+         } else if (currentState == DRAW) {
+            System.out.println("It's a Draw! Bye!");
+         }
+         // Switch player
+         currentPlayer = (currentPlayer == X) ? O : X;
+      } while (currentState == PLAYING);          // repeat if not game-over
+   }
+ 
+   // Initialize the game-board contents and the current states
+   public static void initGame() {
+      for (int row = 0; row < ROWS; ++row) {
+         for (int col = 0; col < COLS; ++col) {
+            board[row][col] = EMPTY;              // all cells empty
+         }
+      }
+      currentState = PLAYING;            // ready to play
+      currentPlayer = X;                 // cross plays first
+   }
+ 
 
 
-	
-    // Set/Reset the board back to all empty values.
-    public void initializeBoard() {
-		
-        // Loop through rows
-        for (int i = 0; i < 3; i++) {
-			
-            // Loop through columns
-            for (int j = 0; j < 3; j++) {
-                board[i][j] = '-';
+   public static void playerMove(int thePlot) {
+      boolean validInput = false;  // for input validation
+      do {
+         if (thePlot == X) {
+            System.out.print("Player 'X', enter your move (row col): ");
+         } else {
+            System.out.print("Player 'O', enter your move (row col): ");
+         }
+         int row = in.nextInt() - 1;  // array index starts at 0 instead of 1
+         int col = in.nextInt() - 1;
+         if (row >= 0 && row < ROWS && col >= 0 && col < COLS && board[row][col] == EMPTY) {
+            currentRow = row;
+            currentCol = col;
+            board[currentRow][currentCol] = thePlot;  // update game-board content
+            validInput = true;  // input okay, exit loop
+         } else {
+            System.out.println("This move at (" + (row + 1) + "," + (col + 1) + ") is not valid. Try again...");
+         }
+      } while (!validInput);  // repeat until input is valid
+   }
+ 
+   /** Update the "currentState" after the player with "theSeed" has placed on
+       (currentRow, currentCol). */
+   public static void updateGame(int thePlot, int currentRow, int currentCol) {
+      if (hasWon(thePlot, currentRow, currentCol)) {  // check if winning move
+         currentState = (thePlot == X) ? X_WON : O_WON;
+      } else if (isDraw()) {  // check for draw
+         currentState = DRAW;
+      }
+      // Otherwise, no change to currentState (still PLAYING).
+   }
+ 
+   /** Return true if it is a draw (no more empty cell) */
+   // TODO: Shall declare draw if no player can "possibly" win
+   public static boolean isDraw() {
+      for (int row = 0; row < ROWS; ++row) {
+         for (int col = 0; col < COLS; ++col) {
+            if (board[row][col] == EMPTY) {
+               return false;  // an empty cell found, not draw, exit
             }
-        }
-    }
-	
-	
-    // Print the current board (may be replaced by GUI implementation later)
-    public void printBoard() {
-        System.out.println("-------------");
-		
-        for (int i = 0; i < 3; i++) {
-            System.out.print("| ");
-            for (int j = 0; j < 3; j++) {
-                System.out.print(board[i][j] + " | ");
+         }
+      }
+      return true;  // no empty cell, it's a draw
+   }
+ 
+   // Return true if the player with "thePlot" has won after placing
+   public static boolean hasWon(int thePlot, int currentRow, int currentCol) {
+      return (board[currentRow][0] == thePlot             // 3-in-the-row
+                   && board[currentRow][1] == thePlot
+                   && board[currentRow][2] == thePlot
+                   
+                   || board[0][currentCol] == thePlot     // 3-in-the-column
+                   && board[1][currentCol] == thePlot
+                   && board[2][currentCol] == thePlot
+                   
+                   || currentRow == currentCol            // 3-in-the-diagonal
+                   && board[0][0] == thePlot
+                   && board[1][1] == thePlot
+                   && board[2][2] == thePlot
+                   
+                   || currentRow + currentCol == 2        // 3-in-the-opposite-diagonal
+                   && board[0][2] == thePlot
+                   && board[1][1] == thePlot
+                   && board[2][0] == thePlot);
+   }
+ 
+   /** Print the game board */
+   public static void printBoard() {
+      for (int row = 0; row < ROWS; ++row) {
+         for (int col = 0; col < COLS; ++col) {
+            printCell(board[row][col]); // print each of the cells
+            if (col != COLS - 1) {
+               System.out.print("|");   // print vertical lines
             }
-            System.out.println();
-            System.out.println("-------------");
-        }
-    }
-	
-	
-    // Loop through all cells of the board and if one is found to be empty (contains char '-') then return false.
-    // Otherwise the board is full.
-    public boolean isBoardFull() {
-        boolean isFull = true;
-		
-        for (int i = 0; i < 3; i++) {
-            for (int j = 0; j < 3; j++) {
-                if (board[i][j] == '-') {
-                    isFull = false;
-                }
-            }
-        }
-		
-        return isFull;
-    }
-	
-	
-    // Returns true if there is a win, false otherwise.
-    // This calls our other win check functions to check the entire board.
-    public boolean checkForWin() {
-        return (checkRowsForWin() || checkColumnsForWin() || checkDiagonalsForWin());
-    }
-	
-	
-    // Loop through rows and see if any are winners.
-    private boolean checkRowsForWin() {
-        for (int i = 0; i < 3; i++) {
-            if (checkRowCol(board[i][0], board[i][1], board[i][2]) == true) {
-                return true;
-            }
-        }
-        return false;
-    }
-	
-	
-    // Loop through columns and see if any are winners.
-    private boolean checkColumnsForWin() {
-        for (int i = 0; i < 3; i++) {
-            if (checkRowCol(board[0][i], board[1][i], board[2][i]) == true) {
-                return true;
-            }
-        }
-        return false;
-    }
-	
-	
-    // Check the two diagonals to see if either is a win. Return true if either wins.
-    private boolean checkDiagonalsForWin() {
-        return ((checkRowCol(board[0][0], board[1][1], board[2][2]) == true) || (checkRowCol(board[0][2], board[1][1], board[2][0]) == true));
-    }
-	
-	
-    // Check to see if all three values are the same (and not empty) indicating a win.
-    private boolean checkRowCol(char c1, char c2, char c3) {
-        return ((c1 != '-') && (c1 == c2) && (c2 == c3));
-    }
-	
-	
-    // Change player marks back and forth.
-    public void changePlayer() {
-        if (currentPlayerMark == 'x') {
-            currentPlayerMark = 'o';
-        }
-        else {
-            currentPlayerMark = 'o';
-        }
-    }
-	
-	
-    // Places a mark at the cell specified by row and col with the mark of the current player.
-    public boolean placeMark(int row, int col) {
-		
-        // Make sure that row and column are in bounds of the board.
-        if ((row >= 0) && (row < 3)) {
-            if ((col >= 0) && (col < 3)) {
-                if (board[row][col] == '-') {
-                    board[row][col] = currentPlayerMark;
-                    return true;
-                }
-            }
-        }
-		
-        return false;
-    }
+         }
+         System.out.println();
+         if (row != ROWS - 1) {
+            System.out.println("-----------"); // print horizontal lines
+         }
+      }
+      System.out.println();
+   }
+ 
+   // Print a cell with the specified letter
+   public static void printCell(int letter) {
+      switch (letter) {
+         case EMPTY:  System.out.print("   "); break;
+         case O: System.out.print(" O "); break;
+         case X:  System.out.print(" X "); break;
+      }
+   }
 }
