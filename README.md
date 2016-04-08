@@ -1,16 +1,26 @@
 import java.util.Scanner;
+import java.util.Random;
+
 /**
  * Tic Tac Toe Honors Java Group Project 2016
  * Main Editor, Ian Rothermel
  * Colin Messanger, Alec Roth  
  */
 public class TicTacToe1 {
-   // Name-constants to represent the plots and cell contents
+public class RNGPlacement {
+
+   Random plot = new Random();
+   int RNGplace = plot.nextInt(3) + 1;
+
+}
+
+
+   // consts to represent the plots and cell contents
    public static final int EMPTY = 0;
    public static final int X = 1;
    public static final int O = 2;
  
-   // Name-constants to represent the various states of the game
+   // consts to represent the various states of the game
    public static final int PLAYING = 0;
    public static final int DRAW = 1;
    public static final int X_WON = 2;
@@ -31,6 +41,7 @@ public class TicTacToe1 {
    public static void main(String[] args) {
       
       initGame();
+      
       // Play the game 
       do {
          playerMove(currentPlayer);                              // update currentRow and currentCol
@@ -63,7 +74,7 @@ public class TicTacToe1 {
 
 
    public static void playerMove(int thePlot) {
-      boolean validInput = false;  // for input validation
+      boolean validInput = false;     // for input validation
       do {
          if (thePlot == X) {
             System.out.print("Player 'X', enter your move (row col): ");
@@ -76,26 +87,26 @@ public class TicTacToe1 {
             currentRow = row;
             currentCol = col;
             board[currentRow][currentCol] = thePlot;  // update game-board content
-            validInput = true;  // input okay, exit loop
+            validInput = true;                      
          } else {
-            System.out.println("This move at (" + (row + 1) + "," + (col + 1) + ") is not valid. Try again...");
+            System.out.println("This move at (" + (row + 1) + "," + (col + 1) + ") is an invalid move!");
          }
       } while (!validInput);  // repeat until input is valid
    }
  
-   /** Update the "currentState" after the player with "theSeed" has placed on
-       (currentRow, currentCol). */
+   // Update the "currentState" after the player with "thePlot" has placed on (currentRow, currentCol).
+   
    public static void updateGame(int thePlot, int currentRow, int currentCol) {
-      if (hasWon(thePlot, currentRow, currentCol)) {  // check if winning move
+      if (hasWon(thePlot, currentRow, currentCol)) {     // check if winning move
          currentState = (thePlot == X) ? X_WON : O_WON;
-      } else if (isDraw()) {  // check for draw
+      } else if (isDraw()) {                             // check for draw
          currentState = DRAW;
       }
       // Otherwise, no change to currentState (still PLAYING).
    }
  
-   /** Return true if it is a draw (no more empty cell) */
-   // TODO: Shall declare draw if no player can "possibly" win
+   // Return true if it is a draw (no more empty cell)
+
    public static boolean isDraw() {
       for (int row = 0; row < ROWS; ++row) {
          for (int col = 0; col < COLS; ++col) {
@@ -104,7 +115,7 @@ public class TicTacToe1 {
             }
          }
       }
-      return true;  // no empty cell, it's a draw
+      return true;            // no empty cell, it's a draw
    }
  
    // Return true if the player with "thePlot" has won after placing
